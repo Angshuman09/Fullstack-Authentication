@@ -29,7 +29,7 @@ export const register = async (req, res) => {
 
         const token = jwt.sign(
             { id: user._id },
-            process.env.JSON_SECRET_KEY,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: '7d' }
         );
 
@@ -71,7 +71,7 @@ export const login = async (req, res) => {
 
         const token = jwt.sign(
             { id: user._id },
-            process.env.JSON_SECRET_KEY,
+            process.env.JWT_SECRET_KEY,
             {expiresIn:'7d'}
         )
 
@@ -84,7 +84,7 @@ export const login = async (req, res) => {
 
         res.status(200).json({success:true,message:"login successful"});
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        res.status(402).json({ success: false, message: error.message });
     }
 }
 
@@ -117,12 +117,13 @@ export const sendVerifyOtp = async (req,res)=>{
 
         const mailOption ={
             from:process.env.SENDER_EMAIL,
-            to:email,
+            to:user.email,
             subject:`Account verification OTP`,
             text:`Your OTP is ${otp}`
         }
 
         await transporter.sendMail(mailOption);
+        res.status(200).json({success:true, message:"otp send successfully"});
 
     } catch (error) {
         res.status(401).json({success:false,message:"some error occur"});
@@ -160,5 +161,78 @@ export const verifyEmail = async (req,res)=>{
     } catch (error) {
         res.status(401)
         .json({success:false,message:error.message});
+    }
+}
+
+export const isAuthenticated = async (req,res)=>{
+    try {
+        res.status(201).json({success:true})
+    } catch (error) {
+        res.status(401).json({success:false,message:error.message});
+    }
+}
+
+export const sendResetOtp = async (req,res)=>{
+    const {email} = req.body;
+    if(!email){
+        return res.status(401).json({success:false,message:"email is required"});
+    }
+    try {
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(401).json({success:false,message:"user not found"});
+        }
+
+        const otp = String(Math.floor(100000 + 900000*Math.random()));
+        user.resetOtp = otp;
+        user.expireResetOtp = Date.now() + 15*60*1000;
+
+        await user.save();
+
+        const mailOption ={
+            from:process.env.SENDER_EMAIL,
+            to:user.email,
+            subject:`Account Reset OTP`,
+            text:`Your OTP is ${otp}`
+        }
+
+        await transporter.sendMail(mailOption);
+        res.status(200).json({success:true, message:"Reset otp send successfully"});
+
+    } catch (error) {
+        res.status(401).json({success:false,message:"reset otp error"});
+    }
+
+}
+
+export const resetPassword = async (req,res)=>{
+    const {email,otp,newPassword} = req.body;
+    if(!email || !otp || !newPassword){
+        return res.status(401).json({success:false,message:"Details requried"});
+    }
+    try {
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(401).json({success:false,message:"user is not found"});
+        }
+
+        if(user.resetOtp=='' || user.resetOtp!=otp){
+            return res.status(401).json({status:false,message:"Invalid OTP"});
+        }
+
+        if(user.expireResetOtp<Date.now()){
+            return res.status(401).json({status:false,message:"OTP Expired"});
+        }
+
+        const hashPassword = await bcrypt.hash(newPassword,10);
+        user.password = hashPassword;
+        user.resetOtp = "";
+        user.expireResetOtp = 0;
+        await user.save();
+
+        res.status(200).json({status:true,message:"password reset successful"});
+        
+    } catch (error) {
+        return res.status(401).json({success:false,message:error.message});
     }
 }

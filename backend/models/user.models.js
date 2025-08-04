@@ -27,11 +27,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    resetPassword: {
+    resetOtp: {
         type: String,
         default: '',
     },
-    expireResetPassword: {
+    expireResetOtp: {
         type: Number,
         default: 0
     }
