@@ -1,13 +1,21 @@
 import './App.css'
 import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import EmailVerify from './pages/EmailVerify'
+import ResetPassword from './pages/ResetPassword'
+import Login from './pages/Login'
 function App() {
 
   return (
-    <>
-      <div className='w-full h-screen bg-zinc-700 flex justify-center items-center'>
-        <h1 className='font-bold text-7xl bg-red-300 p-4 rounded-t-4xl'>Hello</h1>
-      </div>
-    </>
+    <div>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/email-verify' element={<EmailVerify/>}/>
+        <Route path='/reset-password' element={<ResetPassword/>}/>
+      </Routes>
+    </div>
   )
 }
 
