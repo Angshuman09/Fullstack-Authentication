@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../context/Appcontext";
 
 function Header() {
+  const {userData} = useContext(AppContext);
+
   return (
     <div className="bg-[#fefcff] relative flex justify-center items-center w-full min-h-screen overflow-hidden flex-col text-center px-4 gap-3.5">
       {/* Dreamy Sky Pink Glow */}
@@ -16,7 +19,7 @@ function Header() {
         <span style={{ fontFamily: "Pacifico, cursive" }}>Hello </span>
         <span className="relative inline-flex sm:inline">
           <span className="bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] blur-lg filter opacity-30 w-full h-full absolute inset-0 z-10 rounded-4xl"></span>
-          <span className="relative z-30 text-white"> dev.</span>
+          <span className="relative z-30 text-white"> {userData ? userData.name : "Dev."}</span>
         </span>
       </h1>
       <p className="font-light flex justify-center items-center">

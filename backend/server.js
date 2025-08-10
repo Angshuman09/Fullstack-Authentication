@@ -14,8 +14,11 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+
+const allowOrgin=['http://localhost:5173'];
 app.use(cors(
     {
+        origin:allowOrgin,
         credentials:true
     }
 ));

@@ -1,11 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/Appcontext";
+import axios from 'axios';
+import {toast} from 'react-toastify';
 function Login() {
 
   const navigate = useNavigate();
 
-  const {backendUrl, setIsLoggedIn} = useContext(AppContext);
+  const {backendUrl, setIsLoggedIn, getUserData} = useContext(AppContext);
 
 
   const [state, setState] = useState("Sign Up");
@@ -13,6 +15,38 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
+  const onSubmitHandler = async (e)=>{
+    try {
+      e.preventDefault();
+
+      axios.defaults.withCredentials = true;
+
+      if( state === 'Sign Up'){
+        const {data}= await axios.post(backendUrl + '/api/auth/register',{name,email,password});
+
+        if(data.success){
+          setIsLoggedIn(true);
+          getUserData();
+          navigate('/');
+        }else{
+          toast.error(data.message);
+        }
+      }else{
+        const {data}= await axios.post(backendUrl + '/api/auth/login',{email,password});
+
+        if(data.success){
+          setIsLoggedIn(true);
+          getUserData();
+          navigate('/');
+        }else{
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
 
   return (
    <div className="min-h-screen w-full relative flex items-center justify-center">
@@ -33,9 +67,7 @@ function Login() {
   <div onClick={()=> navigate('/')}  style={{ fontFamily: 'Pacifico, cursive' }} className="absolute top-4 left-4 text-emerald-400 hidden sm:block cursor-pointer">
     OAuth
   </div>
-   <div  style={{
-            background: 'linear-gradient(45deg, oklch(82.3% 0.12 346.018), oklch(80.9% 0.105 251.813))'
-          }} className=" flex items-center justify-center flex-col w-xs rounded-2xl p-8 gap-3 relative z-50">
+   <div className="bg-gradient-to-br from-pink-300 to-purple-400 flex items-center justify-center flex-col w-xs rounded-2xl p-8 gap-3 relative z-50">
         <div className="text-2xl">
           {state === "Sign Up" ? <h1>Create Account</h1> : <h1>Login</h1>}
         </div>
@@ -47,7 +79,7 @@ function Login() {
           )}
         </div>
 
-        <form>
+        <form onSubmit={onSubmitHandler}>
         {state==='Sign Up' && (
           <div className="bg-pink-200 px-4 py-2 rounded-3xl flex justify-center items-center gap-1 mb-2">
             <i className="fa-solid fa-user text-slate-600"></i>
@@ -57,6 +89,7 @@ function Login() {
               type="text"
               placeholder="Full Name"
               className="outline-none"
+              required
             />
           </div>
         )}
@@ -66,9 +99,10 @@ function Login() {
             <input
             onChange={(e)=> setEmail(e.target.value)}
             value={email}
-              type="text"
+              type="email"
               placeholder="Your Email"
               className="outline-none"
+              required
             />
           </div>
           <div className="bg-pink-200 px-4 py-2 rounded-3xl flex justify-center items-center gap-1 mb-2">
@@ -79,11 +113,12 @@ function Login() {
               type="password"
               placeholder="Your Password"
               className="outline-none"
+              required
             />
           </div>
-      <p onClick={navigate('/reset-password')} className="font-bold text-blue-900 relative left-[5%] text-xs cursor-pointer">forgot password?</p>
+      <p onClick={()=>navigate('/reset-password')} className="font-bold text-blue-900 relative left-[5%] text-xs cursor-pointer">forgot password?</p>
 
-      <button className="bg-gradient-to-b from-blue-500 to-pink-500 px-3 py-2 rounded-4xl text-white m-2 w-60 hover:from-blue-900 ">{state}</button>
+      <button className="bg-pink-50 px-3 py-2 rounded-4xl text-[#121212] m-2 w-60 hover:bg-pink-100 ">{state}</button>
 
       </form>
       {state==='Sign Up'? ( <div className="text-sm">already have an account? {' '} <span className="text-blue-700 underline cursor-pointer" onClick={()=>setState("Login")}>Login here</span></div>
