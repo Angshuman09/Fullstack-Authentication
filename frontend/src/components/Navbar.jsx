@@ -1,6 +1,5 @@
 import React from "react";
 import {useNavigate} from 'react-router-dom';
-import mysvg from '../assets/svg.svg';
 function Navbar() {
   const navigate = useNavigate();
   return (
