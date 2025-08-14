@@ -10,7 +10,7 @@ router.post('/logout', logout);
 //middlware for userId
 router.post('/send-verify-otp', auth, sendVerifyOtp);
 router.post('/verify-account', auth, verifyEmail);
-router.post('/isAuth',auth,isAuthenticated);
+router.get('/isAuth',auth,isAuthenticated);
 
 router.post('/send-reset-otp',sendResetOtp);
 router.post('/reset-password',resetPassword);
