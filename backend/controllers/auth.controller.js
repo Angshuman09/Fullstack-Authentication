@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.models.js';
 import transporter from '../config/nodemailer.js';
 
+//register
 export const register = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -58,16 +59,17 @@ export const register = async (req, res) => {
     }
 }
 
+//login
 export const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.json({ success: false, message: "email or password are needed" });
 
     try {
         const user = await User.findOne({ email });
-        if (!user) return res.status(401).json({ success: false, message: "user is not found" });
+        if (!user) return res.status(409).json({ success: false, message: "user is not found" });
 
         const verifypassword = await bcrypt.compare(password, user.password);
-        if (!verifypassword) return res.status(401).json({ success: false, message: "password is incorrect" });
+        if (!verifypassword) return res.status(405).json({ success: false, message: "password is incorrect" });
 
         const token = jwt.sign(
             { id: user._id },
@@ -88,6 +90,7 @@ export const login = async (req, res) => {
     }
 }
 
+//logout
 export const logout = async (req,res)=>{
     try {
         res.clearCookie('token',{
@@ -103,6 +106,8 @@ export const logout = async (req,res)=>{
     }
 }
 
+
+//send verify otp
 export const sendVerifyOtp = async (req,res)=>{
     try {
         const {userId} = req.body;
@@ -131,6 +136,8 @@ export const sendVerifyOtp = async (req,res)=>{
 
 }
 
+
+//verify email
 export const verifyEmail = async (req,res)=>{
     const {userId, otp} = req.body;
     if(!userId || !otp) return res.status(401).json({success:false, message:"Missing details"});
@@ -164,6 +171,7 @@ export const verifyEmail = async (req,res)=>{
     }
 }
 
+//is authenticated
 export const isAuthenticated = async (req,res)=>{
     try {
         res.status(201).json({success:true})
@@ -172,6 +180,8 @@ export const isAuthenticated = async (req,res)=>{
     }
 }
 
+
+//send reset otp
 export const sendResetOtp = async (req,res)=>{
     const {email} = req.body;
     if(!email){
@@ -205,6 +215,8 @@ export const sendResetOtp = async (req,res)=>{
 
 }
 
+
+//reset password
 export const resetPassword = async (req,res)=>{
     const {email,otp,newPassword} = req.body;
     if(!email || !otp || !newPassword){
