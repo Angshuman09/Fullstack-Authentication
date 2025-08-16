@@ -55,7 +55,7 @@ function Navbar() {
             {userData.name[0].toUpperCase()}
             <div className="absolute hidden group-hover:block top-0 right-0 z-10 rounded text-black pt-10">
               <ul className="list-none m-0 bg-pink-200 text-sm">
-                {!userData.isAccountverified && (
+                {!userData.isAccountVerified && (
                   <li onClick={sendVerificationOtp} className="py-2 px-3 hover:bg-pink-300 cursor-pointer whitespace-nowrap">
                     Verify email
                   </li>

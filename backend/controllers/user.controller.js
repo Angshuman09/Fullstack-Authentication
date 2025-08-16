@@ -12,7 +12,7 @@ export const getData = async (req,res)=>{
             success:true,
             userData:{
                 name:user.name,
-                isAccountVerified:user.isAccountverified
+                isAccountVerified:user.isAccountVerified
             }
         })
     } catch (error) {

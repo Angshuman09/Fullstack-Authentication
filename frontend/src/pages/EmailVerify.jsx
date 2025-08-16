@@ -42,7 +42,7 @@ function EmailVerify() {
 
       if(data.success){
         toast.success(data.message);
-        getUserData();
+        await getUserData();
         navigate('/');
       }else{
         toast.error(data.message);
@@ -54,7 +54,7 @@ function EmailVerify() {
   }
 
   useEffect(()=>{
-   isLoggedIn && userData && userData.isAccountverified && navigate('/')
+   isLoggedIn && userData && userData?.isAccountVerified && navigate('/')
   },[isLoggedIn,userData])
 
   return (

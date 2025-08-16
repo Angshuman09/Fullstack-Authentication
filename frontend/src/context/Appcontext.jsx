@@ -17,7 +17,11 @@ const AppContextProvider = (props) =>{
             const {data} = await axios.get(backendUrl + '/api/auth/isAuth');
             if(data.success){
                 setIsLoggedIn(true);
-                getUserData();
+                await getUserData();
+            }else {
+                // Explicitly set to false if not authenticated
+                setIsLoggedIn(false);
+                setUserData(null);
             }
 
         } catch (error) {
@@ -36,7 +40,7 @@ const AppContextProvider = (props) =>{
 
     useEffect(()=>{
         getAuthState();
-    });
+    },[]);
     
     const value = {
         backendUrl,

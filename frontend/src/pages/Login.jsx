@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext,useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/Appcontext";
 import axios from 'axios';
@@ -118,7 +118,7 @@ function Login() {
           </div>
       <p onClick={()=>navigate('/reset-password')} className="font-bold text-blue-900 relative left-[5%] text-xs cursor-pointer">forgot password?</p>
 
-      <button className="bg-pink-50 px-3 py-2 rounded-4xl text-[#121212] m-2 w-60 hover:bg-pink-100 ">{state}</button>
+      <button className="bg-pink-50 px-3 py-2 rounded-4xl text-[#121212] m-2 w-60 hover:bg-pink-100 cursor-pointer">{state}</button>
 
       </form>
       {state==='Sign Up'? ( <div className="text-sm">already have an account? {' '} <span className="text-blue-700 underline cursor-pointer" onClick={()=>setState("Login")}>Login here</span></div>

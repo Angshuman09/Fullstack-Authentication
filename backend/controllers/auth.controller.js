@@ -112,7 +112,7 @@ export const sendVerifyOtp = async (req,res)=>{
     try {
         const {userId} = req.body;
         const user = await User.findById(userId);
-        if(user.isAccountverified) return res.status(401).json({success:false,message:"user is already verified"});
+        if(user.isAccountVerified) return res.status(401).json({success:false,message:"user is already verified"});
     
         const otp = String(Math.floor(100000 + 900000*Math.random()));
         user.verifyOtp = otp;
@@ -147,8 +147,8 @@ export const verifyEmail = async (req,res)=>{
 
         if(!user) return res.status(401).json({success:false, message:"user not found"});
 
-        if(user.verifyOtp==='' || user.verifyOtp!=otp){
-            return res.status(401)
+        if(user.verifyOtp==='' || user.verifyOtp!==otp){
+            return res.status(405)
             .json({success:false,message:"Invalid OTP"});
         }
 
@@ -157,16 +157,16 @@ export const verifyEmail = async (req,res)=>{
             .json({success:false,message:"OTP is expired"});
         }
 
-        user.isAccountverified=true;
+        user.isAccountVerified=true;
         user.verifyOtp='';
         user.expireVerifyOtp=0;
 
-        user.save();
+        await user.save();
 
         res.status(200).json({success:true, message:"user verified successful"});
 
     } catch (error) {
-        res.status(401)
+        res.status(409)
         .json({success:false,message:error.message});
     }
 }

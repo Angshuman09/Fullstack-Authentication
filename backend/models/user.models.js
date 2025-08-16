@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         default: 0
     },
 
-    isAccountverified: {
+    isAccountVerified: {
         type: Boolean,
         default: false
     },
