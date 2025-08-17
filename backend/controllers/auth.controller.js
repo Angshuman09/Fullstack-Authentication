@@ -185,12 +185,12 @@ export const isAuthenticated = async (req,res)=>{
 export const sendResetOtp = async (req,res)=>{
     const {email} = req.body;
     if(!email){
-        return res.status(401).json({success:false,message:"email is required"});
+        return res.status(405).json({success:false,message:"email is required"});
     }
     try {
         const user = await User.findOne({email});
         if(!user){
-            return res.status(401).json({success:false,message:"user not found"});
+            return res.status(407).json({success:false,message:"user not found"});
         }
 
         const otp = String(Math.floor(100000 + 900000*Math.random()));
@@ -210,7 +210,7 @@ export const sendResetOtp = async (req,res)=>{
         res.status(200).json({success:true, message:"Reset otp send successfully"});
 
     } catch (error) {
-        res.status(401).json({success:false,message:"reset otp error"});
+        res.status(409).json({success:false,message:"reset otp error"});
     }
 
 }
