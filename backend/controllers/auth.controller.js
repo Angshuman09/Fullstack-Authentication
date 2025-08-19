@@ -2,7 +2,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.models.js';
 import transporter from '../config/nodemailer.js';
-
+import {FIRST_REGISTER} from '../config/emailTamplates.js';
+import { OTP_VERFICATION } from '../config/emailTamplates.js';
+import { RESET_PASSWORD_OTP } from '../config/emailTamplates.js';
 //register
 export const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -46,8 +48,8 @@ export const register = async (req, res) => {
         const mailOption ={
             from:process.env.SENDER_EMAIL,
             to:email,
-            subject:`Hii!! ${name}`,
-            text:"Welcome to Angshuman corp"
+            subject:`Hi ${name}, Welcome to Angshuman Corporation 🎉`,
+            html:FIRST_REGISTER(name,'google.com')
         }
 
         await transporter.sendMail(mailOption);
@@ -124,7 +126,7 @@ export const sendVerifyOtp = async (req,res)=>{
             from:process.env.SENDER_EMAIL,
             to:user.email,
             subject:`Account verification OTP`,
-            text:`Your OTP is ${otp}`
+            html: OTP_VERFICATION(user.name,otp)
         }
 
         await transporter.sendMail(mailOption);
@@ -203,7 +205,7 @@ export const sendResetOtp = async (req,res)=>{
             from:process.env.SENDER_EMAIL,
             to:user.email,
             subject:`Account Reset OTP`,
-            text:`Your OTP is ${otp}`
+            html: RESET_PASSWORD_OTP(user.name,otp)
         }
 
         await transporter.sendMail(mailOption);
@@ -220,20 +222,20 @@ export const sendResetOtp = async (req,res)=>{
 export const resetPassword = async (req,res)=>{
     const {email,otp,newPassword} = req.body;
     if(!email || !otp || !newPassword){
-        return res.status(401).json({success:false,message:"Details requried"});
+        return res.status(409).json({success:false,message:"Details requried"});
     }
     try {
         const user = await User.findOne({email});
         if(!user){
-            return res.status(401).json({success:false,message:"user is not found"});
+            return res.status(407).json({success:false,message:"user is not found"});
         }
 
         if(user.resetOtp=='' || user.resetOtp!=otp){
-            return res.status(401).json({status:false,message:"Invalid OTP"});
+            return res.status(402).json({success:false,message:"Invalid OTP"});
         }
 
         if(user.expireResetOtp<Date.now()){
-            return res.status(401).json({status:false,message:"OTP Expired"});
+            return res.status(400).json({success:false,message:"OTP Expired"});
         }
 
         const hashPassword = await bcrypt.hash(newPassword,10);
@@ -242,7 +244,7 @@ export const resetPassword = async (req,res)=>{
         user.expireResetOtp = 0;
         await user.save();
 
-        res.status(200).json({status:true,message:"password reset successful"});
+        res.status(200).json({success:true,message:"password reset successful"});
         
     } catch (error) {
         return res.status(401).json({success:false,message:error.message});

@@ -4,8 +4,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/Appcontext";
 function EmailVerify() {
-  axios.defaults.withCredentials = true;
   const {backendUrl, isLoggedIn, userData, getUserData} = useContext(AppContext);
+  axios.defaults.withCredentials = true;
 
   const navigate = useNavigate();
   const inputRefs = useRef([]);
