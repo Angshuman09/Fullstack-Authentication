@@ -1,6 +1,6 @@
-# Fullstack Authentication App
+# Fullstack Authentication App ⚡
 
-##About the Project
+## About the Project 
 
 A fullstack MERN authentication system with JWT + Cookies.
 Users can register, login, and stay authenticated securely.
