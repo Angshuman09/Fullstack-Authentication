@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-const allowOrgin=['http://localhost:5173'];
+const allowOrgin=['http://localhost:5173','https://loginwala-angshuman09s-projects.vercel.app'];
 app.use(cors(
     {
         origin:allowOrgin,
