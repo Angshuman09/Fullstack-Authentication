@@ -25,7 +25,15 @@ const AppContextProvider = (props) =>{
             }
 
         } catch (error) {
-            toast.error(error.message);
+            if (error.response?.status === 403) {
+            // User is not authenticated - this is normal, not an error to show
+            setIsLoggedIn(false);
+            setUserData(null);
+        } else {
+            // This is an actual error (network, server, etc.)
+            toast.error("Failed to check authentication status");
+            console.error("Auth check error:", error);
+        }
         }
     }
 

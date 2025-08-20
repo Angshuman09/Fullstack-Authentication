@@ -1,4 +1,4 @@
-export const FIRST_REGISTER= (name, verificationLink)=>`<!DOCTYPE html>
+export const FIRST_REGISTER= (name)=>`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -31,16 +31,6 @@ export const FIRST_REGISTER= (name, verificationLink)=>`<!DOCTYPE html>
               </p>
               
               <!-- Button -->
-              <div style="text-align:center; margin:30px 0;">
-                <a href="${verificationLink}" 
-                   style="background-color:#000000; color:#ffffff; text-decoration:none; padding:12px 25px; border-radius:6px; font-size:16px; font-weight:bold; display:inline-block;">
-                  Verify Email
-                </a>
-              </div>
-              
-              <p style="font-size:14px; color:#777777; line-height:1.5;">
-                If you didn’t request this, you can safely ignore this email.
-              </p>
             </td>
           </tr>
           

@@ -49,7 +49,7 @@ function EmailVerify() {
       }
 
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -60,10 +60,10 @@ function EmailVerify() {
       if(data.success){
         toast.success(data.message);
       }else{
-        toast.error(data.message);
+        toast.error(data.response.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -85,13 +85,13 @@ function EmailVerify() {
   {/* Main form container - Responsive width and padding */}
   <form 
     onSubmit={onSubmitHandler} 
-    className="flex justify-center items-center text-center flex-col bg-slate-900 text-white p-6 sm:p-8 rounded-2xl w-full max-w-sm sm:max-w-md mx-4 shadow-lg"
+    className="flex justify-center items-center text-center flex-col bg-gradient-to-br from-pink-300 to-purple-400 text-slate-800 p-6 sm:p-8 rounded-2xl w-full max-w-sm sm:max-w-md mx-4 shadow-lg"
   >
     {/* Header - Responsive text sizes */}
     <h1 className="font-semibold text-xl sm:text-2xl mb-4">Verify OTP</h1>
     
     {/* Description - Responsive text and spacing */}
-    <p className="mb-6 sm:mb-8 text-sm sm:text-base text-gray-300 leading-relaxed px-2">
+    <p className="mb-6 sm:mb-8 text-sm sm:text-base text-gray-700 leading-relaxed px-2">
       Enter the 6 digit code sent to your email address.
     </p>
     
@@ -105,7 +105,7 @@ function EmailVerify() {
             maxLength="1"
             key={index}
             required
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-800 text-lg sm:text-xl text-center rounded-md border-2 border-slate-700 focus:border-blue-500 focus:outline-none transition-colors duration-200"
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-pink-200 text-lg sm:text-xl text-center rounded-md border-2 border-pink-400 focus:border-pink-800 focus:outline-none transition-colors duration-200"
             ref={(e) => (inputRefs.current[index] = e)}
             onInput={(e) => onInputHandler(e, index)}
             onKeyDown={(e) => onInputHandlerKeyDown(e, index)}
@@ -116,15 +116,15 @@ function EmailVerify() {
     {/* Submit button - Full width with responsive styling */}
     <button 
       type="submit"
-      className="w-full bg-blue-800 hover:bg-blue-700 py-3 sm:py-4 text-white rounded-full font-semibold text-sm sm:text-base transition-colors duration-200 active:transform active:scale-95"
+      className="w-full bg-white hover:bg-pink-100 py-3 sm:py-4 text-slate-500 rounded-full font-semibold text-sm sm:text-base transition-colors duration-200 active:transform active:scale-95"
     >
       Verify Email
     </button>
     
     {/* Optional: Resend code section */}
-    <div className="mt-4 sm:mt-6 text-xs sm:text-sm text-gray-400">
+    <div className="mt-4 sm:mt-6 text-xs sm:text-sm text-gray-700">
       Didn't receive the code?{' '}
-      <span className="text-blue-400 cursor-pointer hover:text-blue-300 underline" onClick={sendVerificationOtp}>
+      <span className="text-blue-700 cursor-pointer hover:text-blue-900 underline" onClick={sendVerificationOtp}>
         Resend
       </span>
     </div>

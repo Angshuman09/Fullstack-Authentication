@@ -41,18 +41,26 @@ function ResetPassword() {
   };
 
   const onSubmitEmail = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/auth/send-reset-otp",
-        { email: Email }
-      );
-      data.success ? toast.success(data.message) : toast.error(data.message);
-      data.success && setIsEmailSend(true);
-    } catch (error) {
-      toast.error(error.message);
+  e.preventDefault();
+  try {
+    const { data } = await axios.post(
+      backendUrl + "/api/auth/send-reset-otp",
+      { email: Email }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      setIsEmailSend(true);
+    } else {
+      toast.error(data.message || "User not exist");
     }
-  };
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Something went wrong. Please try again.";
+    toast.error(message);
+  }
+};
+
 
   const onSubmitOTP = async (e) => {
     e.preventDefault();
@@ -72,7 +80,7 @@ function ResetPassword() {
       data.success ? toast.success(data.message) : toast.error(data.message);
       data.success && navigate("/login");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   };
 

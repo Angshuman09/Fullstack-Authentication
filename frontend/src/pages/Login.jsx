@@ -40,11 +40,11 @@ function Login() {
           getUserData();
           navigate('/');
         }else{
-          toast.error(data.message);
+          toast.error("data not found");
         }
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   }
 

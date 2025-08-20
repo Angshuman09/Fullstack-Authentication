@@ -49,7 +49,7 @@ export const register = async (req, res) => {
             from:process.env.SENDER_EMAIL,
             to:email,
             subject:`Hi ${name}, Welcome to Angshuman Corporation 🎉`,
-            html:FIRST_REGISTER(name,'google.com')
+            html:FIRST_REGISTER(name)
         }
 
         await transporter.sendMail(mailOption);
