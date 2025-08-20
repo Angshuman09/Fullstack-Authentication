@@ -53,43 +53,83 @@ function EmailVerify() {
     }
   }
 
+  const sendVerificationOtp = async ()=>{
+    try {
+      axios.defaults.withCredentials = true;
+      const {data} = await axios.post(backendUrl + '/api/auth/send-verify-otp');
+      if(data.success){
+        toast.success(data.message);
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
   useEffect(()=>{
    isLoggedIn && userData && userData?.isAccountVerified && navigate('/')
   },[isLoggedIn,userData])
 
   return (
-    <div className="w-full min-h-screen bg-linear-to-r from-blue-200 to-pink-200 flex justify-center items-center">
-      <div
-        onClick={() => navigate("/")}
-        style={{ fontFamily: "Pacifico, cursive" }}
-        className="absolute top-4 left-4 text-emerald-400 hidden sm:block cursor-pointer"
-      >
-        OAuth
-      </div>
-      <form onSubmit={onSubmitHandler} className="flex justify-center items-center text-center flex-col bg-slate-900 text-white p-4 rounded-2xl w-96">
-        <h1 className="font-semibold text-2xl mb-4">Verify OTP</h1>
-        <p className="mb-4">Enter the 6 digit code send to your email id.</p>
-        <div className="flex gap-1 mb-8" onPaste={handlePaste}>
-          {Array(6)
-            .fill(0)
-            .map((_, index) => (
-              <input
-                type="text"
-                maxLength="1"
-                key={index}
-                required
-                className="w-12 h-12 bg-slate-800 text-xl text-center rounded-md"
-                ref={(e) => (inputRefs.current[index] = e)}
-                onInput={(e) => onInputHandler(e, index)}
-                onKeyDown={(e) => onInputHandlerKeyDown(e, index)}
-              />
-            ))}
-        </div>
-        <button className="w-full bg-blue-800 py-3 text-white rounded-3xl font-semibold">
-          Verify Email
-        </button>
-      </form>
+    <div className="w-full min-h-screen bg-gradient-to-r from-blue-200 to-pink-200 flex justify-center items-center px-4 py-6">
+  {/* Logo - Now visible on all screen sizes */}
+  <div
+    onClick={() => navigate("/")}
+    style={{ fontFamily: "Pacifico, cursive" }}
+    className="absolute top-4 left-4 text-emerald-400 text-lg sm:text-xl cursor-pointer z-10"
+  >
+    OAuth
+  </div>
+  
+  {/* Main form container - Responsive width and padding */}
+  <form 
+    onSubmit={onSubmitHandler} 
+    className="flex justify-center items-center text-center flex-col bg-slate-900 text-white p-6 sm:p-8 rounded-2xl w-full max-w-sm sm:max-w-md mx-4 shadow-lg"
+  >
+    {/* Header - Responsive text sizes */}
+    <h1 className="font-semibold text-xl sm:text-2xl mb-4">Verify OTP</h1>
+    
+    {/* Description - Responsive text and spacing */}
+    <p className="mb-6 sm:mb-8 text-sm sm:text-base text-gray-300 leading-relaxed px-2">
+      Enter the 6 digit code sent to your email address.
+    </p>
+    
+    {/* OTP input container - Responsive spacing and sizing */}
+    <div className="flex gap-2 sm:gap-3 mb-6 sm:mb-8 justify-center" onPaste={handlePaste}>
+      {Array(6)
+        .fill(0)
+        .map((_, index) => (
+          <input
+            type="text"
+            maxLength="1"
+            key={index}
+            required
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-800 text-lg sm:text-xl text-center rounded-md border-2 border-slate-700 focus:border-blue-500 focus:outline-none transition-colors duration-200"
+            ref={(e) => (inputRefs.current[index] = e)}
+            onInput={(e) => onInputHandler(e, index)}
+            onKeyDown={(e) => onInputHandlerKeyDown(e, index)}
+          />
+        ))}
     </div>
+    
+    {/* Submit button - Full width with responsive styling */}
+    <button 
+      type="submit"
+      className="w-full bg-blue-800 hover:bg-blue-700 py-3 sm:py-4 text-white rounded-full font-semibold text-sm sm:text-base transition-colors duration-200 active:transform active:scale-95"
+    >
+      Verify Email
+    </button>
+    
+    {/* Optional: Resend code section */}
+    <div className="mt-4 sm:mt-6 text-xs sm:text-sm text-gray-400">
+      Didn't receive the code?{' '}
+      <span className="text-blue-400 cursor-pointer hover:text-blue-300 underline" onClick={sendVerificationOtp}>
+        Resend
+      </span>
+    </div>
+  </form>
+</div>
   );
 }
 

@@ -46,15 +46,15 @@ function Navbar() {
             style={{ fontFamily: "Pacifico, cursive" }}
             class="self-center text-2xl whitespace-nowrap text-emerald-200 font-thin"
           >
-            OAuth
+            Loginwala
           </span>
         </div>
         {/* <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"> */}
         {userData ? (
           <div className="w-9 h-9 bg-pink-400 rounded-full flex justify-center items-center relative group hover:bg-pink-500">
             {userData.name[0].toUpperCase()}
-            <div className="absolute hidden group-hover:block top-0 right-0 z-10 rounded text-black pt-10">
-              <ul className="list-none m-0 bg-pink-200 text-sm">
+            <div className="absolute hidden group-hover:block top-0 right-0 z-10 rounded-2xl text-black pt-10">
+              <ul className="list-none m-0 bg-pink-200 text-sm rounded-2xl overflow-hidden">
                 {!userData.isAccountVerified && (
                   <li onClick={sendVerificationOtp} className="py-2 px-3 hover:bg-pink-300 cursor-pointer whitespace-nowrap">
                     Verify email
