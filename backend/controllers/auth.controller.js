@@ -36,11 +36,12 @@ export const register = async (req, res) => {
             { expiresIn: '7d' }
         );
 
-        res.cookie("token", token, {
+       res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            secure: true, // Always true since you're using HTTPS
+            sameSite: "none", // Required for cross-origin cookies
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: process.env.NODE_ENV === "production" ? "loginwala.vercel.app" : undefined // Add domain for Vercel
         });
 
 
@@ -79,12 +80,13 @@ export const login = async (req, res) => {
             {expiresIn:'7d'}
         )
 
-        res.cookie('token',token,{
+        res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
+            secure: true, // Always true since you're using HTTPS
+            sameSite: "none", // Required for cross-origin cookies
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: process.env.NODE_ENV === "production" ? "loginwala.vercel.app" : undefined // Add domain for Vercel
+        });
 
         res.status(200).json({success:true,message:"login successful"});
     } catch (error) {
@@ -95,12 +97,13 @@ export const login = async (req, res) => {
 //logout
 export const logout = async (req,res)=>{
     try {
-        res.clearCookie('token',{
-             httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000
-        })
+      res.cookie("token", token, {
+            httpOnly: true,
+            secure: true, // Always true since you're using HTTPS
+            sameSite: "none", // Required for cross-origin cookies
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: process.env.NODE_ENV === "production" ? "loginwala.vercel.app" : undefined // Add domain for Vercel
+    });
     
         res.status(200).json({success:true,message:"logout successfull"});
     } catch (error) {
