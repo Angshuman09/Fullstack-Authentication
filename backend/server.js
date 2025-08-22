@@ -19,7 +19,9 @@ const allowOrgin=['http://localhost:5173','https://loginwala-angshuman09s-projec
 app.use(cors(
     {
         origin:allowOrgin,
-        credentials:true
+        credentials:true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']
     }
 ));
 
