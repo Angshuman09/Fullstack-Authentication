@@ -97,7 +97,7 @@ export const login = async (req, res) => {
 //logout
 export const logout = async (req,res)=>{
     try {
-      res.cookie("token", token, {
+      res.cookie("token", "", {
             httpOnly: true,
             secure: true, // Always true since you're using HTTPS
             sameSite: "none", // Required for cross-origin cookies
